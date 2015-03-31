@@ -1,7 +1,6 @@
 {
   "name": "delivery-boy",
   "version": "0.0.1",
-  "private": true,
   "description": "Message delivery service using BOSH transport protocol. (under development)",
   "main": "app.js",
   "scripts": {
