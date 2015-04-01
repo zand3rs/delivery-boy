@@ -1,2 +1,2 @@
 # delivery-boy
-Message delivery service using BOSH transport protocol. (under development)
+Message delivery service using a BOSH variant transport protocol. (under development)

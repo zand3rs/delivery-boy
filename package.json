@@ -1,7 +1,7 @@
 {
   "name": "delivery-boy",
   "version": "0.0.1",
-  "description": "Message delivery service using BOSH transport protocol. (under development)",
+  "description": "Message delivery service using a BOSH variant transport protocol. (under development)",
   "main": "app.js",
   "bin": {
     "delivery-boy": "./bin/delivery-boy.js"
