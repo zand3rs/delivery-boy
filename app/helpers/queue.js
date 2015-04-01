@@ -2,16 +2,16 @@ var Memori = require("memori");
 
 //==============================================================================
 
-module.exports = Courier;
+module.exports = Queue;
 
 //==============================================================================
 
 //-- single connection
 var cache = null;
 
-function Courier(id) {
+function Queue(id) {
   this._id = id || 0;
-  this._queue = "message:" + this._id;
+  this._key = "message:" + this._id;
 
   Object.defineProperty(this, "id", {
     get: function() {
@@ -19,16 +19,16 @@ function Courier(id) {
     }
   });
 
-  Object.defineProperty(this, "queue", {
+  Object.defineProperty(this, "key", {
     get: function() {
-      return this._queue;
+      return this._key;
     }
   });
 
   Object.defineProperty(this, "cache", {
     get: function() {
       if (!cache) {
-        cache = new Memori({prefix: "courier:"});
+        cache = new Memori({prefix: "delivery-boy:"});
       }
       return cache;
     }
@@ -37,10 +37,10 @@ function Courier(id) {
 
 //==============================================================================
 
-Courier.prototype.send = function(message, done) {
+Queue.prototype.push = function(message, done) {
   var self = this;
 
-  self.cache.push(self.queue, message, function(err) {
+  self.cache.push(self.key, message, function(err) {
     done(err);
   });
 };
@@ -48,12 +48,12 @@ Courier.prototype.send = function(message, done) {
 
 //------------------------------------------------------------------------------
 
-Courier.prototype.recv = function(done) {
+Queue.prototype.pop = function(done) {
   var self = this;
   var retry = 0;
 
   function poll() {
-    self.cache.pop(self.queue, function(err, message) {
+    self.cache.pop(self.key, function(err, message) {
       if (err || message || ++retry >= 30) {
         return done(err, message);
       }

@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var path = require("path");
-var Courier = require(path.join("..", "lib", "courier"));
+var Queue = require(path.join("..", "helpers", "queue"));
 
 //==============================================================================
 
@@ -18,12 +18,12 @@ function send(req, res, next) {
 
   var channel = req.query["channel"];
   var message = req.query["message"];
-  var courier = new Courier(channel);
+  var queue = new Queue(channel);
 
   console.log("channel: ", channel);
   console.log("message: ", message);
 
-  courier.send(message, function(err) {
+  queue.push(message, function(err) {
     res.json(err || "OK");
   });
 }
@@ -35,9 +35,9 @@ function recv(req, res, next) {
   console.log("recv");
 
   var channel = req.query["channel"];
-  var courier = new Courier(channel);
+  var queue = new Queue(channel);
 
-  courier.recv(function(err, message) {
+  queue.pop(function(err, message) {
     console.log("channel: ", channel);
     console.log("message: ", message);
 
